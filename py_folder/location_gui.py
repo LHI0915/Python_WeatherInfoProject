@@ -1,25 +1,75 @@
 # tkinter 모듈안에 있는 모든 것을 가져가 쓰겠다.
-from tkinter import *
+from tkinter import * 
+import requests
+import json
+import xmltodict
 
 # search 버튼 클릭 시 동작
-def searchBtn_cmd(event):
-    # 버튼 누르면 입력한 주소 위치를 가져옴
-    insert_location_info = entry_insert_location.get()
-    get_location_label.configure(text = insert_location_info)
+def searchBtn_cmd():
+    # 버튼 누르면 입력한 주소 위치를 가져옴 
+    entry_location_info = entry_insert_location.get()
+    get_location_label.configure(text = entry_location_info)
+
+    # entry와 리스트 삭제
     entry_insert_location.delete(0,END) # entry에 있는 내용 삭제
+    location_listbox.delete(0,END)
 
-    if len(insert_location_info) ==0 :
-        return
-    location_listbox.insert(END,insert_location_info)
+    juso_list = search_location(entry_location_info)
 
+    if len(juso_list):
+        for juso in juso_list:
+            location_listbox.insert(END,juso)
+    else:
+        message = "검색된 주소가 없습니다."
+        location_listbox.insert(0,message)
+
+ # API 사용해서 주소 가져오는 과정 
+def search_location(entry_location_info):
+    try:
+        with open("./private data/location_apiKey.json", "r") as f:
+            token = json.load(f)
+
+        api_key = token["api_key"]
+
+        juso_list = []
+        
+        for page_count in range(1,3):
+            url = "https://www.juso.go.kr/addrlink/addrLinkApi.do" 
+            data = {
+                "confmKey" : api_key,
+                "currentPage" : page_count,
+                "countPerPage" : "5",
+                "keyword" : entry_location_info
+            }
+
+            response = requests.post(url, data = data)
+            location_json_type = xmltodict.parse(response.text)#사용하기 불편한 list 타입
+            location_json_type = json.dumps(location_json_type)#json 형태인데 한글로 쓰여있지 않음
+            location_json_type = json.loads(location_json_type)# 최종 한글로 쓰여진 json 타입
+                
+            results_infos = location_json_type["results"]["juso"]
+            
+            for results_info in results_infos:
+                if len(results_infos) < 6:
+                    for dict_info in results_info:
+                        if dict_info =="roadAddr":
+                            juso_list.append(results_info["roadAddr"])
+                elif len(results_infos) >= 6 and results_info == "roadAddr": 
+                    juso_list.append(results_infos["roadAddr"])
+                            
+        return juso_list
+    except:
+        return juso_list
+     
 # 리스트 항목 클릭 시 동작
 def select(event):
     # curselection은 인덱스로 가져옴
     if len(location_listbox.curselection())== 0:
         return
-    select_location_index = location_listbox.curselection()[0]
+    select_location_index = location_listbox.curselection()[0] # 선택한 항목의 인덱스 번호를 알려줌
     select_location = location_listbox.get(select_location_index) #선택한 항목
-    print(select_location)
+    get_location_label.configure(text=select_location)
+    #!!! selection_location이 리스트에서 선택한 항목 !!!
 
 # 화면 생성
 root = Tk()
@@ -40,7 +90,6 @@ searchBtn_insertEntry_frame.pack(fill = "both", padx=3, pady=3)
 # search button
 photo = PhotoImage(file = "images/search.png").subsample(50)
 search_btn = Button(searchBtn_insertEntry_frame, image=photo, command = searchBtn_cmd)
-root.bind("<Return>",searchBtn_cmd)
 search_btn.pack(side = "right")
 
 # insert location
@@ -50,7 +99,7 @@ entry_insert_location.pack(side="left", fill="x", expand=True, ipady=4)
 
 # get entry location info for test
 get_location_label = Label(root, text = "주소 정보 확인", relief="solid", bd=1)
-get_location_label.config(font=("Courier",13,"bold"))
+get_location_label.config(font=("Courier",10,"bold"))
 get_location_label.pack(side="bottom", fill="both", padx=3, pady=3)
 
 # listbox and Scrollbar frame
@@ -72,4 +121,3 @@ location_listbox.pack(side="left", fill="both", expand=True)
 listbox_scrollbar.config(command = location_listbox.yview)
 
 root.mainloop()
-

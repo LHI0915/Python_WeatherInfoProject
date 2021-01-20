@@ -23,12 +23,13 @@ def weather_info(root):
 	weather_label.config(font = ("Courier", 8))
 	weather_label.pack(fill="both")
 
-	pil_weatherPhoto_image = Image.open("../images/weather_sunny_3.png")
+	
+	pil_weatherPhoto_image = Image.open("./images/weather_sunny_3.png")
 	pil_weatherPhoto_image = pil_weatherPhoto_image.resize((50,50), Image.ANTIALIAS)
 	weatherPhoto = ImageTk.PhotoImage(pil_weatherPhoto_image)
 	global weatherPhoto_label
 	weatherPhoto_label = Label(weather_info_frame, image=weatherPhoto)
-	weatherPhoto_label.pack(fill = "both")
+	weatherPhoto_label.pack(fill="both")
 
 	current_tmp_label = Label(weather_info_frame, text=current_tmp_text)
 	current_tmp_label.config(font = ("Courier", 20, "bold"))
@@ -36,7 +37,7 @@ def weather_info(root):
 
 def weather_anime():
 	#이미지 바꿀때 사용
-	pil_weatherPhoto_image = Image.open("../images/weather_sunny_2.png")
+	pil_weatherPhoto_image = Image.open("./images/weather_sunny_2.png")
 	pil_weatherPhoto_image = pil_weatherPhoto_image.resize((50,50), Image.ANTIALIAS)
 	weatherPhoto = ImageTk.PhotoImage(pil_weatherPhoto_image)
 	weatherPhoto_label.config(image=weatherPhoto)

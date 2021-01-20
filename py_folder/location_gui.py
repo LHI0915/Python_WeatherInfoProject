@@ -57,7 +57,7 @@ if __name__ == "__main__":
     searchBtn_insertEntry_frame.pack(fill = "both", padx=3, pady=3)
 
     # search button
-    photo = PhotoImage(file = "images/search.png").subsample(50)
+    photo = PhotoImage(file = "./images/search.png").subsample(50)
     search_btn = Button(searchBtn_insertEntry_frame, image=photo, command = searchBtn_cmd)
     search_btn.pack(side = "right")
 

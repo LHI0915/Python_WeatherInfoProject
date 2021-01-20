@@ -2,11 +2,16 @@ import requests
 import json
 import xmltodict
 
+import config
+
 def get_api_key():
+    '''
     with open("./privateData/api_keys.json", "r") as f:
             token = json.load(f)
     api_key = token["api_key"]
-
+    '''
+    api_key = config.location_api_key
+    
     return api_key
 
 def get_location(entry_location_info, api_key):

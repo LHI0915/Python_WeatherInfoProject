@@ -1,6 +1,8 @@
 from tkinter import *
 from PIL import Image, ImageTk
 
+import location_weather as lw
+
 def weather_info(root):
 	#날씨정보 프레임
 	#location_text : loaction_gui의 input을 받는다
@@ -24,7 +26,7 @@ def weather_info(root):
 	weather_label.pack(fill="both")
 
 	
-	pil_weatherPhoto_image = Image.open("./images/weather_sunny_3.png")
+	pil_weatherPhoto_image = Image.open("../images/weather_sunny_3.png")
 	pil_weatherPhoto_image = pil_weatherPhoto_image.resize((50,50), Image.ANTIALIAS)
 	weatherPhoto = ImageTk.PhotoImage(pil_weatherPhoto_image)
 	global weatherPhoto_label
@@ -34,6 +36,10 @@ def weather_info(root):
 	current_tmp_label = Label(weather_info_frame, text=current_tmp_text)
 	current_tmp_label.config(font = ("Courier", 20, "bold"))
 	current_tmp_label.pack(fill="both")
+
+def weather_set():
+	weather_data = lw.weather_get_api()
+	print(weather_data)
 
 def weather_anime():
 	#이미지 바꿀때 사용

@@ -1,6 +1,7 @@
 import requests 
 import json 
 import datetime
+import pandas as pd
 
 import config
 
@@ -9,8 +10,8 @@ vilage_weather_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService/getVi
 service_key = config.weather_api_key
 
 today = datetime.datetime.today()
-#base_date = today.strftime("%Y%m%d") # "20200214" == 기준 날짜
-base_date = "20210120" # "20200214" == 기준 날짜
+base_date = today.strftime("%Y%m%d") # "20200214" == 기준 날짜
+#base_date = "20210120" # "20200214" == 기준 날짜
 base_time = "0800" # 날씨 값
 
 nx = "60"
@@ -18,7 +19,10 @@ ny = "128"
 
 # res/xylist.csv를 이용해 주소를 확인후 nx와 ny를 매치 시켜야한다 
 # 다음 코드를 통해 cvs 파일을 리스트 형식으로 불러온다
-# xylist = pd.read_csv('xylist.csv', engine='c', dtype=str, sep=',', encoding='CP949')
+xylist = pd.read_csv('../res/xylist.csv', engine='c', dtype=str, sep=',', encoding='CP949')
+
+# csv값 확인
+print(xylist)
 
 payload = "serviceKey=" + service_key + "&" +\
     "dataType=json" + "&" +\
@@ -29,6 +33,8 @@ payload = "serviceKey=" + service_key + "&" +\
 
 # 값 요청
 res = requests.get(vilage_weather_url + payload)
+
+print(res)
 
 items = res.json().get('response').get('body').get('items')
 

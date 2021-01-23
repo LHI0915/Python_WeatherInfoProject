@@ -47,8 +47,13 @@ date_clock_label.config(font = ("Courier",8,"bold"))
 date_clock_label.pack(anchor = "center", fill = "both")
 
 
-#날씨 gui 연결
-wg.weather_info(root)
+location = '경기도 고양시 화전동'
+
+#날씨 gui 연결 code = 2
+display_flag = wg.weather_info(root, location)
+
+# if display_flag == 2 :
+	#	이미지 넣기
 # wg.weather_anime()
 # wg.weather_set()
 

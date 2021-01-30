@@ -8,7 +8,7 @@ def weather_info(root, location):
 	#location_text : loaction_gui의 input을 받는다
 	#weather_text & current_temp_text : location_text를 이용한 날씨 api이용
 	weather_info_frame = Frame(root)
-	weather_info_frame.pack(side = "top", fill = "both", pady=40)
+	weather_info_frame.pack(side = "top", fill="both", pady=40)
 	
 	#location_gui에서 위치 정보 받아오기
 	location_text = "경기도 고양시 화전동"
@@ -51,16 +51,12 @@ def weather_set(location):
 	print(weather_data)
 
 	location_label.config(text=location)
-	weather_label.config(text=weather_data['sky_state'])
+	if 'sky_state' in weather_data: 
+		weather_label.config(text=weather_data['sky_state'])
+	else:
+		current_tmp_label.config(text='없음')
 
 	if 'tmp1' in weather_data: 
 		current_tmp_label.config(text=weather_data['tmp1'])
 	else:
 		current_tmp_label.config(text=weather_data['tmp3'])
-
-def weather_anime():
-	#이미지 바꿀때 사용
-	pil_weatherPhoto_image = Image.open("./images/weather_sunny_2.png")
-	pil_weatherPhoto_image = pil_weatherPhoto_image.resize((50,50), Image.ANTIALIAS)
-	weatherPhoto = ImageTk.PhotoImage(pil_weatherPhoto_image)
-	weatherPhoto_label.config(image=weatherPhoto)

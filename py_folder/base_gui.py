@@ -14,6 +14,16 @@ def update_clock():
 	date_clock_label.config(text=now_date + now_time)
 	root.after(1000, update_clock) 
 
+def update_weather_animation(wcnt):
+	weatherPhoto_frame = weatherPhoto_frames[wcnt]
+	weatherPhoto_label.configure(image=weatherPhoto_frame)
+	
+	wcnt += 1
+	if wcnt == 7:
+		wcnt = 0
+
+	root.after(200, update_weather_animation, wcnt) 
+
 # tkinter 화면 생성
 root = Tk()
 root.title("날씨 정보 프로그램")
@@ -49,13 +59,18 @@ date_clock_label.pack(anchor = "center", fill = "both")
 
 location = '경기도 고양시 화전동'
 
-#날씨 gui 연결 code = 2
 display_flag = wg.weather_info(root, location)
 
-# if display_flag == 2 :
-	#	이미지 넣기
-# wg.weather_anime()
-# wg.weather_set()
+#날씨 gui 연결 code = 2
+if display_flag == 2 :
+	# 넘어온 sky_state를 이용한 image 매칭
+	weatherPhoto_file_name =  "../images/sunny_small.gif"
+	weatherPhoto_frames = [PhotoImage(file = "../images/sunny_small.gif", format = 'gif -index %i' %(i)) for i in range(7)]
+
+	weatherPhoto_label = Label(root, image = "")
+	weatherPhoto_label.pack()
+
+	update_weather_animation(0)
 
 
 #1초 마다 시간 업데이트

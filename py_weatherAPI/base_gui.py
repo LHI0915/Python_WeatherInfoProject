@@ -2,7 +2,10 @@ from tkinter import *
 from PIL import Image, ImageTk
 
 import time
+import location_gui as lg
 import weather_gui as wg
+
+location=""
 
 # 시계 기능
 def update_clock():
@@ -56,33 +59,30 @@ date_clock_label = Label(statusBar_frame, text = "2020 Nov 4, Sun 11:40", backgr
 date_clock_label.config(font = ("Courier",8,"bold"))
 date_clock_label.pack(anchor = "center", fill = "both")
 
-
-location = '경기도 고양시 화전동'
-
-#날씨 gui 연결 code = 2
-if location :
+#날씨 gui 연결
+lg.location_search_list(root)
+if lg.get_location_label["text"] == "주소 정보 확인":
+	"""
+	해야할일
+	프레임 이동하는거 공부해오기
+	https://www.delftstack.com/ko/howto/python-tkinter/how-to-switch-frames-in-tkinter/
+	"""
+	check_location()
+else:
 	# 넘어온 sky_state를 이용한 image 매칭
 	weather_top_space_label = Label(root, pady=4)
 	weather_top_space_label.pack(fill="both")
 
-	# weatherPhoto_file_name =  "../images/weather_sunny.gif"
-	# weatherPhoto_frames = [PhotoImage(file = weatherPhoto_file_name, format = 'gif -index %i' %(i)) for i in range(7)]
-
 	weatherPhoto_label = Label(root, image = "")
 	weatherPhoto_label.pack(fill= "both")
 
-	#	weather_bottom_space_label = Label(root)
-	#	weather_bottom_space_label.pack(fill="both")
+	weather_text = wg.weather_info(root, location)
 
-	# update_weather_animation(0)
+	if weather_text:
+		weatherPhoto_file_name =  "../images/weather_" + weather_text + ".gif"
+		weatherPhoto_frames = [PhotoImage(file = weatherPhoto_file_name, format = 'gif -index %i' %(i)) for i in range(7)]
 
-weather_text = wg.weather_info(root, location)
-
-if location and weather_text:
-	weatherPhoto_file_name =  "../images/weather_" + weather_text + ".gif"
-	weatherPhoto_frames = [PhotoImage(file = weatherPhoto_file_name, format = 'gif -index %i' %(i)) for i in range(7)]
-
-	update_weather_animation(0)
+		update_weather_animation(0)
 
 #1초 마다 시간 업데이트
 update_clock()

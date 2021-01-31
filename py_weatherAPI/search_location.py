@@ -1,52 +1,38 @@
-import requests
-import json
-import xmltodict
+import csv
 
+'''
 import config
 
 def get_api_key():
-    '''
-    with open("./privateData/api_keys.json", "r") as f:
-            token = json.load(f)
-    api_key = token["api_key"]
-    '''
     api_key = config.location_api_key
     
     return api_key
-
-def get_location(entry_location_info, api_key):
+'''
+def read_csv():
     juso_list = []
-    try:
-        for page_count in range(1,3):
-            url = "https://www.juso.go.kr/addrlink/addrLinkApi.do" 
-                
-            data = {
-                "confmKey" : api_key,
-                "currentPage" : page_count,
-                "countPerPage" : "5",
-                "keyword" : entry_location_info
-            }
+    open_csv = open('../res/xylist.csv', 'r', encoding='CP949')
+    read_csv = csv.reader(open_csv)
+    for line in read_csv:
+        line_list = []
 
-            response = requests.post(url, data = data)
-            location_json_type = xmltodict.parse(response.text)#사용하기 불편한 list 타입
-            location_json_type = json.dumps(location_json_type)#json 형태인데 한글로 쓰여있지 않음
-            location_json_type = json.loads(location_json_type)# 최종 한글로 쓰여진 json 타입
-                    
-            results_infos = location_json_type["results"]["juso"]
-                
-            for results_info in results_infos:
-                if len(results_infos) < 6:
-                    for dict_info in results_info:
-                        if dict_info =="roadAddr":
-                            juso_list.append(results_info["roadAddr"])
-                elif len(results_infos) >= 6 and results_info == "roadAddr": 
-                    juso_list.append(results_infos["roadAddr"])
-                                
-        return juso_list
-    except:
-        return juso_list
+        juso_text = line[0] + ' ' + line[1] + ' ' + line[2]
+        line_list.append(juso_text)
 
-if __name__ == "__main__":
-    # search_location.py에서 프로그램 실행시 동작
-    pass
-    
+        # nx == line[3] and ny == line[4]
+ 
+        # print(line_list)
+
+        juso_list.append(line_list)
+
+    open_csv.close()
+
+    return juso_list
+
+def get_location(juso_list, entry_location_info):
+    search_juso_list = []
+
+    for juso in juso_list:
+        if entry_location_info in juso[0]: 
+            search_juso_list.append(juso)
+
+    return search_juso_list

@@ -12,10 +12,10 @@ def location_coordinate(location):
 		
 	# res/xylist.csv를 이용해 주소를 확인후 nx와 ny를 매치 시켜야한다 
 	# 다음 코드를 통해 cvs 파일을 리스트 형식으로 불러온다
-	xylist = pd.read_csv('../res/xylist.csv', engine='c', dtype=str, sep=',', encoding='CP949')
+	# xylist = pd.read_csv('../res/xylist.csv', engine='c', dtype=str, sep=',', encoding='CP949')
 
 	# csv값 확인
-	print(xylist)
+	# print(xylist)
 	
 	nx = "60"
 	ny = "128"	

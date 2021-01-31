@@ -132,6 +132,7 @@ def weather_set(location):
 		else:	vec_direction_text = '북'
 		
 		weather_detail_treeview.item('풍향', values = vec_direction_text)
+
 	if weather_data.get('wsd'):
 		weather_detail_treeview.item('풍속',values=weather_data['wsd']+'m/s')
 

@@ -7,8 +7,9 @@ def weather_info(root, location):
 	#날씨정보 프레임
 	#location_text : loaction_gui의 input을 받는다
 	#weather_text & current_temp_text : location_text를 이용한 날씨 api이용
+
 	weather_info_frame = Frame(root)
-	weather_info_frame.pack(side = "top", fill="both", pady=40)
+	weather_info_frame.pack(side = "top", fill="both", pady=0)
 	
 	#location_gui에서 위치 정보 받아오기
 	location_text = "경기도 고양시 화전동"
@@ -19,44 +20,57 @@ def weather_info(root, location):
 
 	global location_label
 	location_label = Label(weather_info_frame, text=location_text)
-	location_label.config(font = ("Courier",10,"bold"))
+	location_label.config(font = ("Courier",12,"bold"))
 	location_label.pack(anchor="s")
 
 	global weather_label
 	weather_label = Label(weather_info_frame, text=weather_text)
-	weather_label.config(font = ("Courier", 8))
+	weather_label.config(font = ("Courier", 10))
 	weather_label.pack(fill="both")
-
-	'''
-	pil_weatherPhoto_image = Image.open("../images/weather_sunny_3.png")
-	pil_weatherPhoto_image = pil_weatherPhoto_image.resize((50,50), Image.ANTIALIAS)
-	weatherPhoto = ImageTk.PhotoImage(pil_weatherPhoto_image)
-	global weatherPhoto_label
-	weatherPhoto_label = Label(weather_info_frame, image=weatherPhoto)
-	weatherPhoto_label.pack(fill="both")
-	'''
 	
 	global current_tmp_label
 	current_tmp_label = Label(weather_info_frame, text=current_tmp_text)
 	current_tmp_label.config(font = ("Courier", 20, "bold"))
 	current_tmp_label.pack(fill="both")
 
-	weather_set(location)
+	weather_text = weather_set(location)
 
-	return 2
+	return weather_text
 
 def weather_set(location):
 	weather_data = lw.get_weather_info(location)
 
-	print(weather_data)
-
 	location_label.config(text=location)
-	if 'sky_state' in weather_data: 
-		weather_label.config(text=weather_data['sky_state'])
-	else:
-		current_tmp_label.config(text='없음')
+	
+	weather_kor_text = ''
+	weather_eng_text = ''
 
-	if 'tmp1' in weather_data: 
-		current_tmp_label.config(text=weather_data['tmp1'])
+	if int(weather_data['lgt_code']) >= 3:
+		weather_kor_text = '천둥/번개'
+		weather_eng_text = 'stormy'
+	elif int(weather_data['pty_code']) != 0:
+		weather_kor_text = weather_data['pty_state']
+		if weather_data['pty_state'] == '비' :
+			weather_eng_text = 'rainy'
+		elif weather_data['pty_state'] == '눈' :
+			weather_eng_text = 'snowy'
+	elif float(weather_data['wsd']) >= 9:
+		weather_kor_text = '바람'
+		weather_eng_text = 'windy'
 	else:
+		weather_kor_text = weather_data['sky_state']
+		if weather_data['sky_state'] == '맑음' :
+			weather_eng_text = 'sunny'
+		elif weather_data['sky_state'] == '구름많음' :
+			weather_eng_text = 'partly_sunny'
+		else:
+			weather_eng_text = 'cloudy'
+
+	if weather_kor_text: 
+		weather_label.config(text=weather_kor_text)
 		current_tmp_label.config(text=weather_data['tmp3'])
+	else:
+		weather_label.config(text='-')
+		current_tmp_label.config(text='- ℃')
+
+	return weather_eng_text

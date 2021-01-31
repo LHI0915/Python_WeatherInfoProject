@@ -52,6 +52,9 @@ def get_weather_vilage_api(nx, ny):
 	TMX - 낮 최고기온(℃)
 	SKY - 하늘상태(코드값)
 		하늘상태(SKY) 코드 : 맑음(0~5), 구름많음(6~8), 흐림(9~10)
+	WSD - 풍속(m/s)
+		풍속 구간 의미 : 바람이 약하다(0~3), 바람이 약간 강하다(4~8)
+										바람이 강하다(9~13), 바람이 매우 강하다(14~)
 	'''
 	weather_vilage_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst?' 
 
@@ -78,10 +81,6 @@ def get_weather_vilage_api(nx, ny):
 	if date_vilage_flag :
 		base_vilage_date = today.strftime("%Y%m%d")
 		base_vilage_time = get_vilage_base_time(today.hour, today.minute)
-
-	print('---동네예보---')
-	print(base_vilage_date)
-	print(base_vilage_time)
 
 	vilage_payload = "serviceKey=" + service_key + "&" +\
 			"dataType=json" + "&" +\
@@ -136,6 +135,13 @@ def get_weather_vilage_api(nx, ny):
 			vilage_weather_data['sky_code'] = weather_sky_code
 			vilage_weather_data['sky_state'] = weather_sky_state
 
+		#	WSD - 풍속(m/s)
+		# 풍속 구간 의미 : 바람이 약하다(0~3), 바람이 약간 강하다(4~8)
+		#									바람이 강하다(9~13), 바람이 매우 강하다(14~)
+		if item['category'] == 'WSD':
+			vilage_weather_data['wsd'] = item['fcstValue']
+			# vilage_weather_data['wsd'] = item['fcstValue']  + ' m/s'
+
 	return vilage_weather_data
 
 # 초단기예보
@@ -178,10 +184,6 @@ def get_weather_srt_api(nx, ny):
 			today = today - timedelta(hours=1)
 		base_srt_time = today.strftime("%I") + "30"
 
-	print('---초단기예보---')
-	print(base_srt_date)
-	print(base_srt_time)
-
 	srt_payload = "serviceKey=" + service_key + "&" +\
 			"dataType=json" + "&" +\
 			"base_date=" + base_srt_date + "&" +\
@@ -215,7 +217,7 @@ def get_weather_srt_api(nx, ny):
 		
 		# 1시간 강수량(mm)
 		if item['category'] == 'RN1':
-			srt_weather_data['rn'] = item['fcstValue'] + ' mm'
+			srt_weather_data['rn1'] = item['fcstValue'] + ' mm'
 		
 		# 습도(%)
 		if item['category'] == 'REH':
@@ -224,14 +226,10 @@ def get_weather_srt_api(nx, ny):
 		# 강수형태(PTY) 코드 : 없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4), 빗방울(5), 빗방울/눈날림(6), 눈날림(7)
 		if item['category'] == 'PTY':
 			weather_pty_code = item['fcstValue']
-			if weather_pty_code == '1':
+			if weather_pty_code == '1' or weather_pty_code == '4' or weather_pty_code == '5' :
 				weather_pty_state = '비'
-			elif weather_pty_code == '2':
-				weather_pty_state = '비/눈'
-			elif weather_pty_code == '3':
+			elif weather_pty_code == '2' or weather_pty_code == '3' or weather_pty_code == '6' or weather_pty_code == '7':
 				weather_pty_state = '눈'
-			elif weather_pty_code == '4':
-				weather_pty_state = '소나기'
 			else:
 				weather_pty_state = '없음'
 
@@ -265,6 +263,6 @@ def get_weather_info(location):
 	weather_data.update(api_vilage_result)
 	weather_data.update(api_srt_result)
 
-	# print(weather_data)
+	print(weather_data)
 
 	return(weather_data)

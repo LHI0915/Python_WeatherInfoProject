@@ -22,7 +22,7 @@ def update_weather_animation(wcnt):
 	if wcnt == 7:
 		wcnt = 0
 
-	root.after(200, update_weather_animation, wcnt) 
+	root.after(400, update_weather_animation, wcnt) 
 
 # tkinter 화면 생성
 root = Tk()
@@ -59,19 +59,30 @@ date_clock_label.pack(anchor = "center", fill = "both")
 
 location = '경기도 고양시 화전동'
 
-display_flag = wg.weather_info(root, location)
-
 #날씨 gui 연결 code = 2
-if display_flag == 2 :
+if location :
 	# 넘어온 sky_state를 이용한 image 매칭
-	weatherPhoto_file_name =  "../images/sunny_small.gif"
-	weatherPhoto_frames = [PhotoImage(file = "../images/sunny_small.gif", format = 'gif -index %i' %(i)) for i in range(7)]
+	weather_top_space_label = Label(root, pady=4)
+	weather_top_space_label.pack(fill="both")
+
+	# weatherPhoto_file_name =  "../images/weather_sunny.gif"
+	# weatherPhoto_frames = [PhotoImage(file = weatherPhoto_file_name, format = 'gif -index %i' %(i)) for i in range(7)]
 
 	weatherPhoto_label = Label(root, image = "")
-	weatherPhoto_label.pack()
+	weatherPhoto_label.pack(fill= "both")
+
+	weather_bottom_space_label = Label(root)
+	weather_bottom_space_label.pack(fill="both")
+
+	# update_weather_animation(0)
+
+weather_text = wg.weather_info(root, location)
+
+if location and weather_text:
+	weatherPhoto_file_name =  "../images/weather_" + weather_text + ".gif"
+	weatherPhoto_frames = [PhotoImage(file = weatherPhoto_file_name, format = 'gif -index %i' %(i)) for i in range(7)]
 
 	update_weather_animation(0)
-
 
 #1초 마다 시간 업데이트
 update_clock()

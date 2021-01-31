@@ -71,8 +71,8 @@ if location :
 	weatherPhoto_label = Label(root, image = "")
 	weatherPhoto_label.pack(fill= "both")
 
-	weather_bottom_space_label = Label(root)
-	weather_bottom_space_label.pack(fill="both")
+	#	weather_bottom_space_label = Label(root)
+	#	weather_bottom_space_label.pack(fill="both")
 
 	# update_weather_animation(0)
 

@@ -99,10 +99,16 @@ def get_weather_vilage_api(nx, ny):
 		# api가 업데이트 될때 00시 부터 02시 10분 까지 에러 발생
 		# 기본 값을 넘겨준다
 		vilage_weather_data = {
-			'tmp3' : '20 ℃',
-			'pop' : '0 %',
-			'tmpn': '10 ℃', 
-			'tmpx': '20 ℃'	}
+			'tmp' : '36.5℃'	,
+			'pop' : '0%'	,
+			'r06'	:	'0mm'	,
+			'reh'	:	'0%'	,
+			'tmpn': '36.5℃'	, 
+			'tmpx': '36.5℃'	,
+			'sky_code'	:	'0'	,
+			'sky_state'	:	'맑음'	,
+			'vec'	:	'0'	,
+			'wsd'	:	'0m/s'	}
 		return vilage_weather_data
 
 	vilage_weather_data = dict()
@@ -110,17 +116,27 @@ def get_weather_vilage_api(nx, ny):
 	for item in items['item']:
 		# 3시간 기온(℃)
 		if item['category'] == 'T3H':
-			vilage_weather_data['tmp3'] = item['fcstValue'] + ' ℃'
+			vilage_weather_data['tmp'] = item['fcstValue'] + '℃'
 
 		# 강수확률(%)
 		if item['category'] == 'POP':
-			vilage_weather_data['pop'] = item['fcstValue'] + ' %'
+			vilage_weather_data['pop'] = item['fcstValue'] + '%'
 		
+		# 강수량(mm)
+		if item['category'] == 'R06':
+			vilage_weather_data['r06'] = item['fcstValue'] + 'mm'
+
+		# 습도(%)
+		if item['category'] == 'REH':
+			vilage_weather_data['reh'] = item['fcstValue'] + '%'
+
+		# 아침 최저기온(℃)
 		if item['category'] == 'TMN':
-			vilage_weather_data['tmpn'] = item['fcstValue'] + ' ℃'
+			vilage_weather_data['tmpn'] = item['fcstValue'] + '℃'
 		
+		# 낮 최고기온(℃)
 		if item['category'] == 'TMX':
-			vilage_weather_data['tmpx'] = item['fcstValue'] + ' ℃'
+			vilage_weather_data['tmpx'] = item['fcstValue'] + '℃'
 
 		# 하늘상태(SKY) 코드 : 맑음(0~5), 구름많음(6~8), 흐림(9~10) 
 		if item['category'] == 'SKY':
@@ -135,6 +151,10 @@ def get_weather_vilage_api(nx, ny):
 			vilage_weather_data['sky_code'] = weather_sky_code
 			vilage_weather_data['sky_state'] = weather_sky_state
 
+		# 풍향
+		if item['category'] == 'VEC':
+			vilage_weather_data['vec'] = item['fcstValue']
+
 		#	WSD - 풍속(m/s)
 		# 풍속 구간 의미 : 바람이 약하다(0~3), 바람이 약간 강하다(4~8)
 		#									바람이 강하다(9~13), 바람이 매우 강하다(14~)
@@ -148,9 +168,6 @@ def get_weather_vilage_api(nx, ny):
 def get_weather_srt_api(nx, ny):
 	'''
 	초단기예보(UltraSrtFcstInfoService)
-	T1H - 기온(℃)
-	RN1	- 1시간 강수량(mm)
-	REH - 습도(%)
 	PTY	- 강수형태(코드값)
 		강수형태(PTY) 코드 : 없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4), 빗방울(5), 빗방울/눈날림(6), 눈날림(7)
 	LGT	- 낙뢰(코드값)
@@ -201,9 +218,6 @@ def get_weather_srt_api(nx, ny):
 		# api가 업데이트 될때 00시 부터 02시 10분 까지 에러 발생
 		# 기본 값을 넘겨준다
 		srt_weather_data = {
-			'tmp1' : '20 ℃',
-			'rn' : '0 mm',
-			'reh' : '0 %',
 			'pty_code': '0', 'pty_state': '없음',
 			'lgt_code': '0', 'sky_state': '없음' }
 		return srt_weather_data
@@ -211,18 +225,6 @@ def get_weather_srt_api(nx, ny):
 	srt_weather_data = dict()
 
 	for item in items['item']:
-		# 1시간 기온(℃)
-		if item['category'] == 'T1H':
-			srt_weather_data['tmp1'] = item['fcstValue'] + ' ℃'
-		
-		# 1시간 강수량(mm)
-		if item['category'] == 'RN1':
-			srt_weather_data['rn1'] = item['fcstValue'] + ' mm'
-		
-		# 습도(%)
-		if item['category'] == 'REH':
-			srt_weather_data['reh'] = item['fcstValue'] + ' %'
-
 		# 강수형태(PTY) 코드 : 없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4), 빗방울(5), 빗방울/눈날림(6), 눈날림(7)
 		if item['category'] == 'PTY':
 			weather_pty_code = item['fcstValue']

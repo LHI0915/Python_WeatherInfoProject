@@ -1,6 +1,8 @@
 from tkinter import *
 from PIL import Image, ImageTk
 
+import tkinter.ttk
+
 import location_weather as lw
 
 def weather_info(root, location):
@@ -9,7 +11,7 @@ def weather_info(root, location):
 	#weather_text & current_temp_text : location_text를 이용한 날씨 api이용
 
 	weather_info_frame = Frame(root)
-	weather_info_frame.pack(side = "top", fill="both", pady=0)
+	weather_info_frame.pack(side = "top", fill="both", pady=25)
 	
 	#location_gui에서 위치 정보 받아오기
 	location_text = "경기도 고양시 화전동"
@@ -33,7 +35,25 @@ def weather_info(root, location):
 	current_tmp_label.config(font = ("Courier", 20, "bold"))
 	current_tmp_label.pack(fill="both")
 
+	global weather_detail_treeview
+	weather_detail_treeview = tkinter.ttk.Treeview(root, columns=["one"], show="tree", selectmode="none")
+	#weather_detail_treeview = tkinter.ttk.Treeview(root, columns=["one"], selectmode="none")
+	weather_detail_treeview.pack()
+
+	weather_detail_treeview.column("one", width= "100",  anchor="center")
+	weather_detail_treeview.heading("one", text= " 값 ", anchor="center")
+
+	weather_detail =[(" ", " "),("강수확률", "-"), 
+		("낙뢰확률", "-"),	("강수량", "-"),	("습도", "-"), 
+		("최저기온", "-"), ("최고기온", "-"), 
+		("풍향", "-"),	("풍속", "-")
+	]
+
+	for i in range(len(weather_detail)):
+		weather_detail_treeview.insert("", "end", text=weather_detail[i][0], values=weather_detail[i][1], iid=weather_detail[i][0], tag="TAG")
+
 	weather_text = weather_set(location)
+	weather_detail_treeview.tag_configure('TAG', background='white', font = ("Courier", 9,"bold"))
 
 	return weather_text
 
@@ -45,6 +65,8 @@ def weather_set(location):
 	weather_kor_text = ''
 	weather_eng_text = ''
 
+	# 날씨정보 프레임(weather_info_frame)
+	# 날씨 애니메이션 text인 weather_eng_text 값 적용 
 	if int(weather_data['lgt_code']) >= 3:
 		weather_kor_text = '천둥/번개'
 		weather_eng_text = 'stormy'
@@ -68,9 +90,28 @@ def weather_set(location):
 
 	if weather_kor_text: 
 		weather_label.config(text=weather_kor_text)
-		current_tmp_label.config(text=weather_data['tmp3'])
+		current_tmp_label.config(text=weather_data['tmp'])
 	else:
 		weather_label.config(text='-')
 		current_tmp_label.config(text='- ℃')
+
+	# 날씨정보 디테일 (weather_detail_treeview)
+	if weather_data.get('pop'):
+		weather_detail_treeview.item('강수확률',values=weather_data['pop'])
+	if weather_data.get('lgt_code'):
+		weather_detail_treeview.item('낙뢰확률',values=weather_data['lgt_state'])
+	if weather_data.get('r06'):
+		weather_detail_treeview.item('강수량',values=weather_data['r06'])
+	if weather_data.get('reh'):
+		weather_detail_treeview.item('습도',values=weather_data['reh'])
+	if weather_data.get('tmpn'):
+		weather_detail_treeview.item('최저기온',values=weather_data['tmpn'])
+	if weather_data.get('tmpx'):
+		weather_detail_treeview.item('최고기온',values=weather_data['tmpx'])
+	if weather_data.get('vec'):
+		weather_detail_treeview.item('풍향',values=weather_data['vec'])
+	if weather_data.get('wsd'):
+		weather_detail_treeview.item('풍속',values=weather_data['wsd']+'m/s')
+
 
 	return weather_eng_text

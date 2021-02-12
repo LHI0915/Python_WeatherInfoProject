@@ -14,12 +14,6 @@ def update_clock():
 	date_clock_label.config(text=now_date + now_time)
 	statusBar_frame.after(1000, update_clock) 
 
-# tkinter 화면 생성
-# root = Tk()
-# root.title("날씨 정보 프로그램")
-# root.geometry("320x480+300+50") # 480 : 가로, 680 : 세로, 100 : x좌표, 300 : y좌표
-# root.resizable(False, False) # x, y 너비 변경 불가, 창 크기 변경 불가
-
 def status_info(root,final_location):
 
 	# 상태창 프레임
@@ -57,7 +51,4 @@ def status_info(root,final_location):
 
 	#1초 마다 시간 업데이트
 	update_clock()
-
-	# tkinter 화면
-	#root.mainloop()
 

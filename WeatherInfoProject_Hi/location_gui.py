@@ -4,8 +4,10 @@ import requests
 import json
 import xmltodict
 import search_location as sl
+import base_gui as bg
 
 final_location = []
+
 # search 버튼 클릭 시 동작
 def searchBtn_cmd():
     
@@ -43,10 +45,10 @@ def select(event):
             global final_location 
             final_location = juso_list[juso_key]
             print(final_location)
+            bg.status_info(root,final_location)
+            first_frame.destroy()
             break
     
-    
-
 if __name__ == "__main__":
     # api_key 가져오기
     api_key = sl.get_api_key()
@@ -58,13 +60,16 @@ if __name__ == "__main__":
     root.geometry("320x480+300+50") # 480 : 가로, 680 : 세로, 100 : x좌표, 300 : y좌표
     root.resizable(False, False) # x, y 너비 변경 불가, 창 크기 변경 불가
 
+    first_frame = Frame(root)
+    first_frame.pack(side = "top", fill = "both")
+
     # information about this funtion
-    info_label = Label(root, text="주소 또는 장소를 입력해주세요", relief="solid", bd =1)
+    info_label = Label(first_frame, text="주소 또는 장소를 입력해주세요", relief="solid", bd =1)
     info_label.config(font = ("Courier",13,"bold"))
     info_label.pack(side = "top", fill="both", padx=3, pady=3)
 
     # 지역 입력 entry와 검색 버튼을 담을 frame
-    searchBtn_insertEntry_frame = Frame(root, relief = "solid", bd = 1)
+    searchBtn_insertEntry_frame = Frame(first_frame, relief = "solid", bd = 1)
     searchBtn_insertEntry_frame.pack(fill = "both", padx=3, pady=3)
 
     # search button
@@ -83,7 +88,7 @@ if __name__ == "__main__":
     get_location_label.pack(side="bottom", fill="both", padx=3, pady=3)
 
     # listbox and Scrollbar frame
-    listbox_scrollbar_frame = Frame(root)
+    listbox_scrollbar_frame = Frame(first_frame)
     listbox_scrollbar_frame.pack(fill = "both", padx=3, pady=3)
 
     # listbox Scrollbar

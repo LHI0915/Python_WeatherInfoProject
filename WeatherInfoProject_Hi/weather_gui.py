@@ -4,7 +4,7 @@ from PIL import Image, ImageTk
 import location_weather_crawling as lwc
 import location_gui as lg
 
-def weather_info(root):
+def weather_info(root,location):
 	#날씨정보 프레임
 	#location_text : loaction_gui의 input을 받는다
 	#weather_text & current_temp_text : location_text를 이용한 날씨 api이용
@@ -12,8 +12,9 @@ def weather_info(root):
 	weather_info_frame.pack(side = "top", fill = "both", pady=40)
 	
 	#location_gui에서 위치 정보 받아오기
-	#location_text = lg.final_location
-	location_text = "서울시 용산구"
+	location_text = location
+	print("location text : ", location_text)
+	#location_text = "서울시 용산구"
 
 	# 받아온 위치정보를 이용해서 날씨 정보값 받아오기
 	temp_and_cast = lwc.location_weather(location_text)

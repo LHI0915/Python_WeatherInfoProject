@@ -5,6 +5,7 @@ import json
 import xmltodict
 import search_location as sl
 
+final_location = []
 # search 버튼 클릭 시 동작
 def searchBtn_cmd():
     
@@ -16,7 +17,9 @@ def searchBtn_cmd():
     entry_insert_location.delete(0,END) # entry에 있는 내용 삭제
     location_listbox.delete(0,END)
 
+    global juso_list 
     juso_list = sl.get_location(entry_location_info,api_key)
+    #print(juso_list)
 
     if len(juso_list):
         for juso in juso_list:
@@ -34,12 +37,20 @@ def select(event):
     select_location_index = location_listbox.curselection()[0] # 선택한 항목의 인덱스 번호를 알려줌
     select_location = location_listbox.get(select_location_index) #선택한 항목
     get_location_label.configure(text=select_location)
-    #!!! selection_location이 리스트에서 선택한 항목 !!!
+    #!!! select_location이 리스트에서 선택한 항목 !!!
+    for juso_key in juso_list.keys():
+        if juso_key == select_location:
+            global final_location 
+            final_location = juso_list[juso_key]
+            print(final_location)
+            break
+    
+    
 
 if __name__ == "__main__":
     # api_key 가져오기
     api_key = sl.get_api_key()
-
+    
     # 화면 생성
     root = Tk()
     root.title("날씨 정보 프로그램")

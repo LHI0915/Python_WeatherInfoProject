@@ -1,7 +1,8 @@
 from tkinter import *
 from PIL import Image, ImageTk
 
-import location_weather as lw
+import location_weather_crawling as lwc
+import location_gui as lg
 
 def weather_info(root):
 	#날씨정보 프레임
@@ -11,11 +12,18 @@ def weather_info(root):
 	weather_info_frame.pack(side = "top", fill = "both", pady=40)
 	
 	#location_gui에서 위치 정보 받아오기
-	location_text = "경기도 고양시 화전동"
+	#location_text = lg.final_location
+	location_text = "서울시 용산구"
+
+	# 받아온 위치정보를 이용해서 날씨 정보값 받아오기
+	temp_and_cast = lwc.location_weather(location_text)
 
 	#날씨 api를 통해 날씨 정보값 읽어오기
-	weather_text = "맑음"
-	current_tmp_text = "20" + "℃"
+	current_tmp_text = temp_and_cast[0]
+	weather_text = temp_and_cast[1]
+
+	print(current_tmp_text)
+	print(weather_text)
 
 	location_label = Label(weather_info_frame, text=location_text)
 	location_label.config(font = ("Courier",10,"bold"))
@@ -26,7 +34,7 @@ def weather_info(root):
 	weather_label.pack(fill="both")
 
 	
-	pil_weatherPhoto_image = Image.open("../images/weather_sunny_3.png")
+	pil_weatherPhoto_image = Image.open("./images/weather_sunny_3.png")
 	pil_weatherPhoto_image = pil_weatherPhoto_image.resize((50,50), Image.ANTIALIAS)
 	weatherPhoto = ImageTk.PhotoImage(pil_weatherPhoto_image)
 	global weatherPhoto_label
@@ -37,10 +45,6 @@ def weather_info(root):
 	current_tmp_label.config(font = ("Courier", 20, "bold"))
 	current_tmp_label.pack(fill="both")
 
-def weather_set():
-	weather_data = lw.weather_get_api()
-	print(weather_data)
-
 def weather_anime():
 	#이미지 바꿀때 사용
 	pil_weatherPhoto_image = Image.open("./images/weather_sunny_2.png")
@@ -48,16 +52,3 @@ def weather_anime():
 	weatherPhoto = ImageTk.PhotoImage(pil_weatherPhoto_image)
 	weatherPhoto_label.config(image=weatherPhoto)
 
-'''
-# 화면 생성
-# base_gui로 연결시 주석처리
-root = Tk()
-root.title("날씨 정보 프로그램")
-root.geometry("320x480+300+50") # 480 : 가로, 680 : 세로, 100 : x좌표, 300 : y좌표
-root.resizable(False, False) # x, y 너비 변경 불가, 창 크기 변경 불가
-
-weather_info(root)
-
-#base_gui로 연결시 주석처리
-root.mainloop()
-'''

@@ -2,7 +2,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 
 import time
-import weather_gui as wg
+import location_gui as lg
 
 # 시계 기능
 def update_clock():
@@ -14,10 +14,16 @@ def update_clock():
 	date_clock_label.config(text=now_date + now_time)
 	statusBar_frame.after(1000, update_clock) 
 
-def status_info(root,final_location):
+
+if __name__ == "__main__":
+		
+	# tkinter 화면 생성
+	root = Tk()
+	root.title("날씨 정보 프로그램")
+	root.geometry("320x480+300+50") # 480 : 가로, 680 : 세로, 100 : x좌표, 300 : y좌표
+	root.resizable(False, False) # x, y 너비 변경 불가, 창 크기 변경 불가
 
 	# 상태창 프레임
-	global statusBar_frame 
 	statusBar_frame = Frame(root, bg = "black")
 	statusBar_frame.pack(side = "top", fill = "both")
 
@@ -39,16 +45,19 @@ def status_info(root,final_location):
 	batteryPhoto_label = Label(statusBar_frame, image=batteryPhoto, background = "black")
 	batteryPhoto_label.pack(side = "right", padx=3, fill = "both")
 
-	global date_clock_label 
 	date_clock_label  = Label(statusBar_frame, text = "2020 Nov 4, Sun 11:40", background = "black", foreground="white")
 	date_clock_label.config(font = ("Courier",8,"bold"))
 	date_clock_label.pack(anchor = "center", fill = "both")
 
 	#날씨 gui 연결
-	wg.weather_info(root,final_location)
+	lg.first_start_page(root)
+	print("final_location", lg.final_location)
+	
 	# wg.weather_anime()
 	# wg.weather_set()
 
 	#1초 마다 시간 업데이트
 	update_clock()
+
+	root.mainloop()
 

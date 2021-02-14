@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 
 import time
 import location_gui as lg
+#import weather_gui as wg
 
 # 시계 기능
 def update_clock():
@@ -51,7 +52,8 @@ if __name__ == "__main__":
 
 	#날씨 gui 연결
 	lg.first_start_page(root)
-	print("final_location", lg.final_location)
+	#wg.weather_info_frame.pack(side = "top", fill = "both", pady=40)
+	
 	
 	# wg.weather_anime()
 	# wg.weather_set()

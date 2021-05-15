@@ -6,33 +6,19 @@ import datetime
 from datetime import timedelta
 
 import config
-from location_gui import final_location
 
 def location_coordinate(location):
 	# 여기서 주소를 좌표로 변경
 		
 	# res/xylist.csv를 이용해 주소를 확인후 nx와 ny를 매치 시켜야한다 
 	# 다음 코드를 통해 cvs 파일을 리스트 형식으로 불러온다
-	xylist = pd.read_csv('./res/xylist.csv', engine='c', dtype=str, sep=',', encoding='CP949')
-	final_location = ["경기도", "고양시 일산서구", "주엽1동"]
-	for idx, juso in enumerate(final_location):
-		final_location[idx] = juso.replace(" ","")
+	# xylist = pd.read_csv('../res/xylist.csv', engine='c', dtype=str, sep=',', encoding='CP949')
 
 	# csv값 확인
-	#print(xylist)
+	# print(xylist)
 	
-	nx = "20"
-	ny = "20"	
-	
-	for row_index, row in xylist.iterrows():
-		if type(row) == float:
-			continue
-		if row[0] == final_location[0] and row[1]==final_location[1] and row[2]==final_location[2]:
-		 	nx = row[3]
-		 	ny = row[4]
-		#  	print("{0} {1} {2}" .format(row[0],row[1],row[2])
-		# print("{0} {1}" .format(row[3], row[4]))
-	print(nx, ny)
+	nx = "60"
+	ny = "128"	
 	
 	return nx, ny
 

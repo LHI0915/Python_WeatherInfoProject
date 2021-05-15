@@ -1,3 +1,8 @@
+"""
+실행 파일 __name__ == __main__: 만들기
+
+"""
+
 from tkinter import *
 from PIL import Image, ImageTk
 

@@ -1,8 +1,3 @@
-'''
-테스트
-
-'''
-
 # tkinter 모듈안에 있는 모든 것을 가져가 쓰겠다.
 from tkinter import * 
 import requests

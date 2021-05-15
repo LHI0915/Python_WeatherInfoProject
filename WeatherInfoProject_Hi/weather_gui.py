@@ -37,7 +37,7 @@ def weather_info(root,location):
 	# 날씨 정보 이미지로 받아오기
 	weather_dict = {"맑음" : "sunny", "흐림" : "cloudy","구름많음":"cloudy", "구름조금":"partly_sunny", \
 		"비":"rainy", "눈":"snowy","천둥번개":"stormy","바람":"windy"}
-	print(weather_dict["k"])
+	#print(weather_dict["k"])
 	global weather_images
 	weatherPhoto_file_name = "./images/weather_" + weather_dict[weather_text] + ".gif"
 	

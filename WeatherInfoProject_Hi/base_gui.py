@@ -52,12 +52,7 @@ if __name__ == "__main__":
 
 	#날씨 gui 연결
 	lg.first_start_page(root)
-	#wg.weather_info_frame.pack(side = "top", fill = "both", pady=40)
 	
-	
-	# wg.weather_anime()
-	# wg.weather_set()
-
 	#1초 마다 시간 업데이트
 	update_clock()
 

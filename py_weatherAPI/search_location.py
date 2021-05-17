@@ -10,7 +10,7 @@ def get_api_key():
 '''
 def read_csv():
     juso_list = []
-    open_csv = open('./res/xylist.csv', 'r', encoding='CP949')
+    open_csv = open('../res/xylist.csv', 'r', encoding='CP949')
     read_csv = csv.reader(open_csv)
     for line in read_csv:
         line_list = []

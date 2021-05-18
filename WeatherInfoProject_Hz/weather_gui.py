@@ -1,8 +1,3 @@
-"""
-실행 파일 __name__ == __main__: 만들기
-
-"""
-
 from tkinter import *
 from PIL import Image, ImageTk
 
@@ -11,15 +6,21 @@ import tkinter.ttk
 import location_weather as lw
 import location_gui as lg
 
-def update_weather_animation(wcnt,weather_images,weather_image_label):
-	weather_images= weather_images[wcnt]
-	weather_image_label.configure(image=weather_images)
+weatherPhoto_file_name =  ""
+weather_images = 0
+def update_weather_animation(wcnt):
+	global weather_images
+	if weather_images == 0:
+		weather_images = [PhotoImage(file = weatherPhoto_file_name, format="gif -index %i" %(i)) for i in range(7)]	
+	
+	weather_image = weather_images[wcnt]
+	weather_image_label.configure(image=weather_image)
 	
 	wcnt += 1
 	if wcnt == 7:
 		wcnt = 0
 
-	weather_info_frame.after(400, update_weather_animation, wcnt, weather_images, weather_image_label) 
+	weather_info_frame.after(400, update_weather_animation, wcnt) 
 
 def weather_info(root, location):
 	#날씨정보 프레임
@@ -104,15 +105,15 @@ def weather_set(root, location):
 		else:
 			weather_eng_text = 'cloudy'
 
-	weather_image_label = Label(root, image = "")
+	global weather_image_label
+	weather_image_label = Label(weather_info_frame , image = "")
 	weather_image_label.pack(fill= "both")
 
+	global weatherPhoto_file_name
 	weatherPhoto_file_name =  "../images/weather_" + weather_eng_text + ".gif"
-	weather_images = [PhotoImage(file = weatherPhoto_file_name, format="gif -index %i" %(i)) for i in range(7)]	
-	weather_image_label = Label(weather_info_frame)
-
-	update_weather_animation(0, weather_images, weather_image_label)
-	weather_image_label.pack()
+	# weather_images = [PhotoImage(file = weatherPhoto_file_name, format="gif -index %i" %(i)) for i in range(7)]	
+	
+	update_weather_animation(0)
 
 	if weather_kor_text: 
 		weather_label.config(text=weather_kor_text)

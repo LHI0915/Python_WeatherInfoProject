@@ -9,17 +9,30 @@ from PIL import Image, ImageTk
 import tkinter.ttk
 
 import location_weather as lw
+import location_gui as lg
+
+def update_weather_animation(wcnt,weather_images,weather_image_label):
+	weather_images= weather_images[wcnt]
+	weather_image_label.configure(image=weather_images)
+	
+	wcnt += 1
+	if wcnt == 7:
+		wcnt = 0
+
+	weather_info_frame.after(400, update_weather_animation, wcnt, weather_images, weather_image_label) 
 
 def weather_info(root, location):
 	#날씨정보 프레임
 	#location_text : loaction_gui의 input을 받는다
 	#weather_text & current_temp_text : location_text를 이용한 날씨 api이용
-
+	global weather_info_frame 
 	weather_info_frame = Frame(root)
 	weather_info_frame.pack(side = "top", fill="both", pady=25)
 	
 	#location_gui에서 위치 정보 받아오기
-	location_text = "경기도 고양시 화전동"
+	#location_text = "경기도 고양시 화전동"
+	location_text = location
+	print("location text : ", location_text)
 
 	#날씨 api를 통해 날씨 정보값 읽어오기
 	weather_text = "맑음"
@@ -42,7 +55,6 @@ def weather_info(root, location):
 
 	global weather_detail_treeview
 	weather_detail_treeview = tkinter.ttk.Treeview(root, columns=["one"], show="tree", selectmode="none")
-	#weather_detail_treeview = tkinter.ttk.Treeview(root, columns=["one"], selectmode="none")
 	weather_detail_treeview.pack()
 
 	weather_detail_treeview.column("one", width= "100",  anchor="center")
@@ -57,12 +69,11 @@ def weather_info(root, location):
 	for i in range(len(weather_detail)):
 		weather_detail_treeview.insert("", "end", text=weather_detail[i][0], values=weather_detail[i][1], iid=weather_detail[i][0], tag="TAG")
 
-	weather_text = weather_set(location)
+	weather_text = weather_set(root, location)
 	weather_detail_treeview.tag_configure('TAG', background='white', font = ("Courier", 9,"bold"))
 
-	return weather_text
 
-def weather_set(location):
+def weather_set(root, location):
 	weather_data = lw.get_weather_info(location)
 
 	location_label.config(text=location)
@@ -92,6 +103,16 @@ def weather_set(location):
 			weather_eng_text = 'partly_sunny'
 		else:
 			weather_eng_text = 'cloudy'
+
+	weather_image_label = Label(root, image = "")
+	weather_image_label.pack(fill= "both")
+
+	weatherPhoto_file_name =  "../images/weather_" + weather_eng_text + ".gif"
+	weather_images = [PhotoImage(file = weatherPhoto_file_name, format="gif -index %i" %(i)) for i in range(7)]	
+	weather_image_label = Label(weather_info_frame)
+
+	update_weather_animation(0, weather_images, weather_image_label)
+	weather_image_label.pack()
 
 	if weather_kor_text: 
 		weather_label.config(text=weather_kor_text)
@@ -141,5 +162,3 @@ def weather_set(location):
 	if weather_data.get('wsd'):
 		weather_detail_treeview.item('풍속',values=weather_data['wsd']+'m/s')
 
-
-	return weather_eng_text

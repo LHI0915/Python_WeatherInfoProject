@@ -23,7 +23,7 @@
 ---
 
 ## <b>실행화면</b>
-<b>WeatherInfoProject_Hi</b>
+<b>WeatherInfoProject_Hi</b> <Br>
 <img src = "./readmeImages/Hi_main.PNG" width ="200" /> <img src = "./readmeImages/Hi_location.PNG" width ="200" /> <img src = "./readmeImages/Hi_weather.PNG" width ="200" />
 
 <b> WeatherInfoProject_Hz</b> <Br>

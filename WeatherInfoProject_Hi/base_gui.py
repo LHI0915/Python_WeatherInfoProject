@@ -3,7 +3,7 @@ from PIL import Image, ImageTk
 
 import time
 import location_gui as lg
-#import weather_gui as wg
+
 
 # 시계 기능
 def update_clock():

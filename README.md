@@ -24,7 +24,7 @@
 
 ## <b>실행화면</b>
 <b>WeatherInfoProject_Hi</b>
-
+<img src = "./readmeImages/Hi_main.png" width ="200" /> <img src = "./readmeImages/Hi_location.png" width ="200" /> <img src = "./readmeImages/Hi_weather.png" width ="200" />
 
 <b> WeatherInfoProject_Hz</b> <Br>
 <img src = "./readmeImages/Hz_main.png" width ="200" /> <img src = "./readmeImages/Hz_location.png" width ="200" /> <img src = "./readmeImages/Hz_weather.png" width ="200" />

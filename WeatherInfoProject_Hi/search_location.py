@@ -3,6 +3,7 @@ import json
 import xmltodict
 import config
 
+
 def get_api_key():
     api_key = config.location_api_key
     return api_key

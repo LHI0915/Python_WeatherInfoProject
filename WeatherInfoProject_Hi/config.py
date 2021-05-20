@@ -1,0 +1,2 @@
+location_api_key = "devU01TX0FVVEgyMDIxMDUxNjAwNTMwNTExMTE2NTY="
+weather_api_key = "Y17IJzBaUQ%2F0eCYHq5qgV2B8O%2FsOzdHJW8Lrwcoe0256Ur5PkfgwFPPAi0o4YMnXvWkjy70BTW5UfNG%2F4bjuhg%3D%3D"

@@ -1,4 +1,4 @@
-# Wearher Info Project
+# Weather Info Project
 >가상환경 실행<br>
 `conda activate myvenv`
 
